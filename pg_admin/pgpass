@@ -1,1 +1,1 @@
-postgres:5432:geddit:admin:password123
+postgres:5432:*:admin:password123
