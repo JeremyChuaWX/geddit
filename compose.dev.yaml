@@ -1,0 +1,40 @@
+services:
+  postgres:
+    command: ["postgres", "-c", "log_statement=all"]
+    container_name: postgres
+    env_file: .env.dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $POSTGRES_URL"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+
+  pg_admin:
+    container_name: pg_admin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env.dev
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    volumes:
+      - ./pg_admin/servers.json:/pgadmin4/servers.json
+      - ./pg_admin/pgpass:/var/lib/pgadmin/storage/admin@admin.com/pgpass
+
+  postgres.migrate:
+    command: ["up"]
+    container_name: migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env.dev
+    entrypoint: ["migrate", "-database", "$POSTGRES_URL", "-path", "/migrations"]
+    image: migrate/migrate
+    volumes:
+      - ./migrations:/migrations
