@@ -2,17 +2,18 @@ package user
 
 import (
 	"context"
+	"geddit/password"
 	"geddit/postgres"
-	"log/slog"
 
 	"github.com/gofrs/uuid/v5"
+	"github.com/jackc/pgx/v5"
 )
 
 type Service interface {
-	Create(dto CreateDto) (uuid.UUID, error)
-	GetByUsername(username string) (User, error)
-	GetByEmail(email string) (User, error)
-	GetById(id uuid.UUID) (User, error)
+	create(dto createDto) (id uuid.UUID, err error)
+	getByUsername(username string) (user User, err error)
+	getByEmail(email string) (user User, err error)
+	getById(id uuid.UUID) (user User, err error)
 }
 
 type service struct {
@@ -23,50 +24,74 @@ func NewService(postgres *postgres.Postgres) Service {
 	return &service{postgres}
 }
 
-func (s *service) Create(dto CreateDto) (uuid.UUID, error) {
-	var id uuid.UUID
+func (s *service) create(dto createDto) (id uuid.UUID, err error) {
+	passwordHash, err := password.Hash(dto.password)
+	if err != nil {
+		return uuid.Nil, err
+	}
 	query := `
 	INSERT INTO users (username, email, password_hash)
 	VALUES ($1, $2, $3)
 	RETURNING id;
 	`
-	err := s.postgres.Pool.QueryRow(context.Background(), query, dto.Username, dto.Email, dto.PasswordHash).
-		Scan(&id)
+	err = s.postgres.Pool.QueryRow(
+		context.Background(),
+		query,
+		dto.username,
+		dto.email,
+		passwordHash,
+	).Scan(
+		&id,
+	)
 	if err != nil {
-		slog.Error("failed to create new user", err)
 		return uuid.Nil, err
 	}
 	return id, nil
 }
 
-func (s *service) GetByUsername(username string) (User, error) {
-	var user User
-	query := "SELECT * FORM users WHERE users.username = $1;"
-	err := s.postgres.Pool.QueryRow(context.Background(), query, username).Scan(&user)
+func (s *service) getByUsername(username string) (user User, err error) {
+	query := `
+	SELECT id, username, email, password_hash FROM users
+	WHERE username = $1;
+	`
+	rows, err := s.postgres.Pool.Query(context.Background(), query, username)
 	if err != nil {
-		slog.Error("failed to query users by username", err)
+		return User{}, err
+	}
+	user, err = pgx.CollectOneRow(rows, pgx.RowToStructByName[User])
+	if err != nil {
 		return User{}, err
 	}
 	return user, nil
 }
 
-func (s *service) GetByEmail(email string) (User, error) {
-	var user User
-	query := "SELECT * FORM users WHERE users.email = $1;"
-	err := s.postgres.Pool.QueryRow(context.Background(), query, email).Scan(&user)
+func (s *service) getByEmail(email string) (user User, err error) {
+	query := `
+	SELECT id, username, email, password_hash FROM users
+	WHERE email = $1;
+	`
+	rows, err := s.postgres.Pool.Query(context.Background(), query, email)
 	if err != nil {
-		slog.Error("failed to query users by email", err)
+		return User{}, err
+	}
+	user, err = pgx.CollectOneRow(rows, pgx.RowToStructByName[User])
+	if err != nil {
 		return User{}, err
 	}
 	return user, nil
 }
 
-func (s *service) GetById(id uuid.UUID) (User, error) {
-	var user User
-	query := "SELECT * FORM users WHERE users.id = $1;"
-	err := s.postgres.Pool.QueryRow(context.Background(), query, id).Scan(&user)
+func (s *service) getById(id uuid.UUID) (user User, err error) {
+	query := `
+	SELECT id, username, email, password_hash FROM users
+	WHERE id = $1;
+	`
+	rows, err := s.postgres.Pool.Query(context.Background(), query, id)
 	if err != nil {
-		slog.Error("failed to query users by id", err)
+		return User{}, err
+	}
+	user, err = pgx.CollectOneRow(rows, pgx.RowToStructByName[User])
+	if err != nil {
 		return User{}, err
 	}
 	return user, nil

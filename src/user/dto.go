@@ -9,8 +9,8 @@ type User struct {
 	PasswordHash string    `db:"password_hash"`
 }
 
-type CreateDto struct {
-	Username     string
-	Email        string
-	PasswordHash string
+type createDto struct {
+	username string
+	email    string
+	password string
 }
