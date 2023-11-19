@@ -3,6 +3,7 @@ module geddit
 go 1.21.4
 
 require (
+	github.com/go-chi/chi/v5 v5.0.10
 	github.com/gofrs/uuid/v5 v5.0.0
 	github.com/jackc/pgx-gofrs-uuid v0.0.0-20230224015001-1d428863c2e2
 	github.com/jackc/pgx/v5 v5.5.0
