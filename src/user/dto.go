@@ -14,3 +14,8 @@ type createDto struct {
 	email    string
 	password string
 }
+
+type loginDto struct {
+	email    string
+	password string
+}

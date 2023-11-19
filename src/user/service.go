@@ -14,6 +14,7 @@ type Service interface {
 	getByUsername(username string) (user User, err error)
 	getByEmail(email string) (user User, err error)
 	getById(id uuid.UUID) (user User, err error)
+	login(dto loginDto) (loggedIn bool, err error)
 }
 
 type service struct {
@@ -95,4 +96,19 @@ func (s *service) getById(id uuid.UUID) (user User, err error) {
 		return User{}, err
 	}
 	return user, nil
+}
+
+func (s *service) login(dto loginDto) (loggedIn bool, err error) {
+	user, err := s.getByEmail(dto.email)
+	if err != nil {
+		return false, err
+	}
+	match, err := password.Verify(dto.password, user.PasswordHash)
+	if err != nil {
+		return false, err
+	}
+	if !match {
+		return false, nil
+	}
+	return true, nil
 }
