@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/gofrs/uuid/v5"
 )
 
 type Controller interface {
@@ -45,11 +46,28 @@ func (c *controller) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("haeslf"))
+	w.Write([]byte(id.String()))
 }
 
 func (c *controller) get(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		slog.Error("unable to parse create user request", err)
+		slog.Error("unable to parse get user request", err)
 	}
+	var user User
+	var err error
+	if r.Form.Has("id") {
+		user, err = c.service.getById(uuid.FromStringOrNil(r.Form.Get("id")))
+	}
+	if r.Form.Has("email") {
+		user, err = c.service.getByEmail(r.Form.Get("email"))
+	}
+	if r.Form.Has("username") {
+		user, err = c.service.getByEmail(r.Form.Get("username"))
+	}
+	if err != nil {
+		slog.Error("failed get user request", err)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(user.Id.String()))
 }
