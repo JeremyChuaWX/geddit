@@ -2,9 +2,7 @@
 
 A fourm web application in Go.
 
-## User Stories
-
-> As a user I can...
+## Feature
 
 - P0
   - view all posts in order of creation date
