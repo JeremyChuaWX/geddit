@@ -2,7 +2,7 @@
 
 A fourm web application in Go.
 
-## Feature
+## Features
 
 - P0
   - view all posts in order of creation date
