@@ -10,11 +10,11 @@ import (
 )
 
 type Service interface {
-	create(dto createDto) (id uuid.UUID, err error)
-	getByUsername(username string) (user User, err error)
-	getByEmail(email string) (user User, err error)
-	getById(id uuid.UUID) (user User, err error)
-	login(dto loginDto) (loggedIn bool, err error)
+	Create(dto CreateDto) (id uuid.UUID, err error)
+	GetByUsername(username string) (user User, err error)
+	GetByEmail(email string) (user User, err error)
+	GetById(id uuid.UUID) (user User, err error)
+	Login(dto LoginDto) (user User, err error)
 }
 
 type service struct {
@@ -25,8 +25,8 @@ func NewService(postgres *postgres.Postgres) Service {
 	return &service{postgres}
 }
 
-func (s *service) create(dto createDto) (id uuid.UUID, err error) {
-	passwordHash, err := password.Hash(dto.password)
+func (s *service) Create(dto CreateDto) (id uuid.UUID, err error) {
+	passwordHash, err := password.Hash(dto.Password)
 	if err != nil {
 		return uuid.Nil, err
 	}
@@ -38,8 +38,8 @@ func (s *service) create(dto createDto) (id uuid.UUID, err error) {
 	err = s.postgres.Pool.QueryRow(
 		context.Background(),
 		query,
-		dto.username,
-		dto.email,
+		dto.Username,
+		dto.Email,
 		passwordHash,
 	).Scan(
 		&id,
@@ -50,7 +50,7 @@ func (s *service) create(dto createDto) (id uuid.UUID, err error) {
 	return id, nil
 }
 
-func (s *service) getByUsername(username string) (user User, err error) {
+func (s *service) GetByUsername(username string) (user User, err error) {
 	query := `
 	SELECT id, username, email, password_hash FROM users
 	WHERE username = $1;
@@ -66,7 +66,7 @@ func (s *service) getByUsername(username string) (user User, err error) {
 	return user, nil
 }
 
-func (s *service) getByEmail(email string) (user User, err error) {
+func (s *service) GetByEmail(email string) (user User, err error) {
 	query := `
 	SELECT id, username, email, password_hash FROM users
 	WHERE email = $1;
@@ -82,7 +82,7 @@ func (s *service) getByEmail(email string) (user User, err error) {
 	return user, nil
 }
 
-func (s *service) getById(id uuid.UUID) (user User, err error) {
+func (s *service) GetById(id uuid.UUID) (user User, err error) {
 	query := `
 	SELECT id, username, email, password_hash FROM users
 	WHERE id = $1;
@@ -98,17 +98,14 @@ func (s *service) getById(id uuid.UUID) (user User, err error) {
 	return user, nil
 }
 
-func (s *service) login(dto loginDto) (loggedIn bool, err error) {
-	user, err := s.getByEmail(dto.email)
+func (s *service) Login(dto LoginDto) (user User, err error) {
+	user, err = s.GetByEmail(dto.Email)
 	if err != nil {
-		return false, err
+		return User{}, err
 	}
-	match, err := password.Verify(dto.password, user.PasswordHash)
+	err = password.Verify(dto.Password, user.PasswordHash)
 	if err != nil {
-		return false, err
+		return User{}, err
 	}
-	if !match {
-		return false, nil
-	}
-	return true, nil
+	return user, nil
 }

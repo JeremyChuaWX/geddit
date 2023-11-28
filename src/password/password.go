@@ -23,6 +23,7 @@ type params struct {
 var (
 	ErrorInvalidHash         = errors.New("encoded hash is in the wrong format")
 	ErrorIncompatibleVersion = errors.New("incompatible version of argon2")
+	ErrorWrongPassword       = errors.New("wrong password")
 )
 
 // sane defaults for argon2 hashing algorithm; modify before use in production
@@ -61,17 +62,17 @@ func Hash(password string) (encodedHash string, err error) {
 	return encodedHash, nil
 }
 
-func Verify(password string, encodedHash string) (match bool, err error) {
+func Verify(password string, encodedHash string) (err error) {
 	values := strings.Split(encodedHash, "$")
 	if len(values) != 6 {
-		return false, ErrorInvalidHash
+		return ErrorInvalidHash
 	}
 	var version int
 	if _, err = fmt.Sscanf(values[2], "v=%d", &version); err != nil {
-		return false, err
+		return err
 	}
 	if version != argon2.Version {
-		return false, ErrorIncompatibleVersion
+		return ErrorIncompatibleVersion
 	}
 	p = params{}
 	if _, err = fmt.Sscanf(
@@ -81,15 +82,15 @@ func Verify(password string, encodedHash string) (match bool, err error) {
 		&p.iterations,
 		&p.parallelism,
 	); err != nil {
-		return false, err
+		return err
 	}
 	salt, err := base64.RawStdEncoding.Strict().DecodeString(values[4])
 	if err != nil {
-		return false, err
+		return err
 	}
 	hash, err := base64.RawStdEncoding.Strict().DecodeString(values[5])
 	if err != nil {
-		return false, err
+		return err
 	}
 	p.keyLength = uint32(len(hash))
 	otherHash := argon2.IDKey(
@@ -101,7 +102,7 @@ func Verify(password string, encodedHash string) (match bool, err error) {
 		p.keyLength,
 	)
 	if subtle.ConstantTimeCompare(hash, otherHash) == 1 {
-		return true, nil
+		return nil
 	}
-	return false, nil
+	return ErrorWrongPassword
 }

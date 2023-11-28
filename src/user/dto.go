@@ -9,13 +9,13 @@ type User struct {
 	PasswordHash string    `db:"password_hash"`
 }
 
-type createDto struct {
-	username string
-	email    string
-	password string
+type CreateDto struct {
+	Username string
+	Email    string
+	Password string
 }
 
-type loginDto struct {
-	email    string
-	password string
+type LoginDto struct {
+	Email    string
+	Password string
 }
