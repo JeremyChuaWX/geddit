@@ -4,7 +4,7 @@
     "description": "A fourm web application in Go.",
     "main": "index.js",
     "scripts": {
-        "format": "prettier --write package.json './templates/*.html'"
+        "format": "prettier --write package.json './static/*.html'"
     },
     "keywords": [],
     "author": "",

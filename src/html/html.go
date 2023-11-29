@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-var TEMPLATE_DIR = "../templates" // relative to main.go
+var TEMPLATE_DIR = "../static" // relative to main.go
 
 func GetTemplate(name string) *template.Template {
 	templatePath := filepath.Join(TEMPLATE_DIR, fmt.Sprintf("%s.html", name))
