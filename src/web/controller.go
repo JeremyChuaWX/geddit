@@ -1,37 +1,38 @@
 package web
 
 import (
+	"geddit/html"
 	"geddit/user"
 	"log/slog"
 	"net/http"
-	"text/template"
 
 	"github.com/go-chi/chi/v5"
 )
 
-var templates = make(map[string]*template.Template)
-
 type Controller struct {
 	UserService user.Service
-	Router      *chi.Mux
 }
 
 func (c *Controller) InitRouter() *chi.Mux {
+	router := chi.NewRouter()
+
 	// user login
-	c.Router.Get("/login", c.userLoginPage)
-	c.Router.Post("/login", c.userLogin)
+	router.Get("/login", c.userLoginPage)
+	router.Post("/login", c.userLogin)
 
 	// user signup
-	c.Router.Get("/signup", c.userSignupPage)
-	c.Router.Post("/signup", c.userSignup)
+	router.Get("/signup", c.userSignupPage)
+	router.Post("/signup", c.userSignup)
 
 	// user profile
-	c.Router.Get("/profile", c.userProfilePage)
+	router.Get("/profile", c.userProfilePage)
 
-	return c.Router
+	return router
 }
 
 func (c *Controller) userLoginPage(w http.ResponseWriter, r *http.Request) {
+	slog.Info(html.GetStatic("login"))
+	http.ServeFile(w, r, html.GetStatic("login"))
 }
 
 func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {

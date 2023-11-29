@@ -6,8 +6,6 @@ import (
 	"geddit/web"
 	"log"
 	"net/http"
-
-	"github.com/go-chi/chi/v5"
 )
 
 func main() {
@@ -16,7 +14,6 @@ func main() {
 	userService := user.NewService(postgres)
 	webController := &web.Controller{
 		UserService: userService,
-		Router:      chi.NewRouter(),
 	}
 	router := webController.InitRouter()
 	log.Println("starting server on port 3000...")
