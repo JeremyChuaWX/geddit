@@ -31,7 +31,6 @@ func (c *Controller) InitRouter() *chi.Mux {
 }
 
 func (c *Controller) userLoginPage(w http.ResponseWriter, r *http.Request) {
-	slog.Info(html.GetStatic("login"))
 	http.ServeFile(w, r, html.GetStatic("login"))
 }
 
@@ -54,6 +53,7 @@ func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) userSignupPage(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, html.GetStatic("signup"))
 }
 
 func (c *Controller) userSignup(w http.ResponseWriter, r *http.Request) {
@@ -76,4 +76,5 @@ func (c *Controller) userSignup(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) userProfilePage(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, html.GetStatic("profile"))
 }
