@@ -16,6 +16,12 @@ type Controller struct {
 func (c *Controller) InitRouter() *chi.Mux {
 	router := chi.NewRouter()
 
+	// static resources
+	router.Handle(
+		"/static/*",
+		http.StripPrefix("/static/", http.FileServer(http.Dir("../static"))),
+	)
+
 	// user login
 	router.Get("/login", c.userLoginPage)
 	router.Post("/login", c.userLogin)
