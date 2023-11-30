@@ -2,14 +2,24 @@
     "name": "geddit",
     "version": "1.0.0",
     "description": "A forum web application in Go.",
+    "type": "module",
     "main": "index.js",
     "scripts": {
-        "format": "prettier --write package.json './static/*.html'"
+        "build": "concurrently 'vite build' 'tailwindcss -i ./frontend/index.css -o ./static/index.css'",
+        "format": "prettier --write ."
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "prettier": "^3.1.0"
+        "autoprefixer": "^10.4.16",
+        "concurrently": "^8.2.2",
+        "postcss": "^8.4.31",
+        "prettier": "^3.1.0",
+        "tailwindcss": "^3.3.5",
+        "vite": "^5.0.4"
+    },
+    "dependencies": {
+        "htmx.org": "^1.9.9"
     }
 }
