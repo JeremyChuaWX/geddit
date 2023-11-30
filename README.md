@@ -20,6 +20,19 @@ A forum web application in Go.
   - edit the contents of my posts, with diffs/versions to display the changes publicly
   - edit the contents of my comments, with diffs/versions to display the changes publicly
 
+## Development
+
+- we will use docker compose to create the development environment
+- run the following make command to start the development environment
+  ```bash
+  make docker-up
+  ```
+  - this starts the postgres DB, pgadmin and runs the migrations
+- run the following make command to spin down the development environment
+  ```bash
+  make docker-down
+  ```
+
 ## Documentation
 
 - [Database](<>)
