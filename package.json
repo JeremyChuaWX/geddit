@@ -1,7 +1,7 @@
 {
     "name": "geddit",
     "version": "1.0.0",
-    "description": "A fourm web application in Go.",
+    "description": "A forum web application in Go.",
     "main": "index.js",
     "scripts": {
         "format": "prettier --write package.json './static/*.html'"

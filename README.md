@@ -1,6 +1,6 @@
 # Geddit
 
-A fourm web application in Go.
+A forum web application in Go.
 
 ## Features
 
