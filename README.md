@@ -25,3 +25,10 @@ A forum web application in Go.
 - [Database](<>)
 - [API](<>)
 - [Frontend](<>)
+
+## Todo
+
+- setup environment variables in go
+  - DB connection string
+  - template file path
+  - static resources file path
