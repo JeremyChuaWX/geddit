@@ -4,8 +4,38 @@
         <title>Geddit</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script
+            src="https://unpkg.com/htmx.org@1.9.9"
+            integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
+            crossorigin="anonymous"
+        ></script>
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
-    <body>
-        Login Page
+    <body class="flex flex-col gap-8 justify-center items-center w-full">
+        <div class="flex flex-col gap-8 justify-center items-center p-8 border">
+            <h1 class="text-lg">Login</h1>
+            <form
+                method="post"
+                class="flex flex-col gap-8 justify-center items-center"
+            >
+                <div class="grid grid-cols-2 gap-2">
+                    <label>Email</label>
+                    <input
+                        name="email"
+                        type="email"
+                        required
+                        class="py-2 px-4 border"
+                    />
+                    <label>Password</label>
+                    <input
+                        name="password"
+                        type="password"
+                        required
+                        class="py-2 px-4 border"
+                    />
+                </div>
+                <button type="submit" class="py-2 px-4 border">Login</button>
+            </form>
+        </div>
     </body>
 </html>
