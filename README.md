@@ -30,5 +30,5 @@ A forum web application in Go.
 
 - setup environment variables in go
   - DB connection string
-  - template file path
-  - static resources file path
+  - template file path (relative to `main.go`)
+  - static resources file path (relative to `main.go`)
