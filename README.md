@@ -22,15 +22,17 @@ A forum web application in Go.
 
 ## Development
 
-- we will use docker compose to create the development environment
-- run the following make command to start the development environment
+- we use npm to spin up our development environment
   ```bash
-  make docker-up
+  npm run build
   ```
-  - this starts the postgres DB, pgadmin and runs the migrations
-- run the following make command to spin down the development environment
+- remove build artifacts with the following npm script
   ```bash
-  make docker-down
+  npm run clean
+  ```
+- format template files with the following npm script
+  ```bash
+  npm run format
   ```
 
 ## Documentation
