@@ -1,17 +1,21 @@
 package web
 
 import (
-	"geddit/pkg/html"
+	"fmt"
+	"geddit/pkg/templates"
 	"geddit/pkg/user"
+	"html/template"
 	"log/slog"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/gofrs/uuid/v5"
 )
 
 const STATIC_RESOURCES_PATH = "./static"
 
 type Controller struct {
+	Templates   *template.Template
 	UserService user.Service
 }
 
@@ -42,7 +46,7 @@ func (c *Controller) InitRouter() *chi.Mux {
 }
 
 func (c *Controller) userLoginPage(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, html.GetStatic("login"))
+	http.ServeFile(w, r, templates.GetStatic("login"))
 }
 
 func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {
@@ -59,12 +63,16 @@ func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {
 		slog.Error("failed login request", err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(user.Id.String()))
+	http.Redirect(
+		w,
+		r,
+		fmt.Sprintf("/profile?id=%s", user.Id),
+		http.StatusFound,
+	)
 }
 
 func (c *Controller) userSignupPage(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, html.GetStatic("signup"))
+	http.ServeFile(w, r, templates.GetStatic("signup"))
 }
 
 func (c *Controller) userSignup(w http.ResponseWriter, r *http.Request) {
@@ -82,10 +90,33 @@ func (c *Controller) userSignup(w http.ResponseWriter, r *http.Request) {
 		slog.Error("failed signup request", err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(id.String()))
+	http.Redirect(
+		w,
+		r,
+		fmt.Sprintf("/profile?id=%s", id.String()),
+		http.StatusFound,
+	)
 }
 
 func (c *Controller) userProfilePage(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, html.GetStatic("profile"))
+	values := r.URL.Query()
+	id, err := uuid.FromString(values.Get("id"))
+	if err != nil {
+		slog.Error("failed profile request", err)
+		return
+	}
+	user, err := c.UserService.GetById(id)
+	if err != nil {
+		slog.Error("failed profile request", err)
+		return
+	}
+	t := c.Templates.Lookup("profile")
+	if t == nil {
+		slog.Error("failed profile request profile template is empty")
+		return
+	}
+	if err := t.Execute(w, user); err != nil {
+		slog.Error("failed profile request", err)
+		return
+	}
 }
