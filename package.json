@@ -9,7 +9,7 @@
         "build": "concurrently 'vite build --watch' 'tailwindcss -i ./frontend/index.css -o ./static/index.css --watch' 'go run main.go'",
         "postbuild": "docker compose --env-file .env.dev -f compose.dev.yaml down --remove-orphans --volumes",
         "clean": "rm -rf static pg_data",
-        "format": "prettier --write ."
+        "format": "prettier --write . '!./pg_data'"
     },
     "keywords": [],
     "author": "",
