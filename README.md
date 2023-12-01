@@ -24,7 +24,7 @@ A forum web application in Go.
 
 - we use npm to spin up our development environment
   ```bash
-  npm run build
+  npm run dev
   ```
 - remove build artifacts with the following npm script
   ```bash

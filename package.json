@@ -5,9 +5,12 @@
     "type": "module",
     "main": "index.js",
     "scripts": {
-        "prebuild": "docker compose --env-file .env.dev -f compose.dev.yaml up --build -d",
-        "build": "concurrently -k 'vite build --watch' 'tailwindcss -i ./frontend/index.css -o ./static/index.css --watch' 'go run main.go'",
-        "postbuild": "docker compose --env-file .env.dev -f compose.dev.yaml down --remove-orphans --volumes",
+        "predev": "docker compose --env-file .env.dev -f compose.dev.yaml up --build -d",
+        "dev-vite": "vite build --watch",
+        "dev-tailwind": "tailwindcss -i ./frontend/index.css -o ./static/index.css --watch",
+        "dev-go": "go run main.go",
+        "dev": "concurrently -k 'npm:dev-*'",
+        "postdev": "docker compose --env-file .env.dev -f compose.dev.yaml down --remove-orphans --volumes",
         "clean": "rm -rf static pg_data",
         "format": "prettier --write . '!./pg_data'"
     },
