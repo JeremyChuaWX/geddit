@@ -8,13 +8,27 @@ import (
 
 const TEMPLATES_PATH = "./templates"
 
-func InitTemplates() *template.Template {
-	t := template.New("")
-	pattern := filepath.Join(TEMPLATES_PATH, "*.html")
-	return template.Must(t.ParseGlob(pattern))
+type Templates = map[string]*template.Template
+
+func InitTemplates() Templates {
+	t := make(Templates)
+	composeTemplate(t, "login", []string{"base", "login"})
+	composeTemplate(t, "signup", []string{"base", "signup"})
+	composeTemplate(t, "profile", []string{"base", "profile"})
+	return t
 }
 
-// TODO: deprecate for nested components
-func GetStatic(name string) string {
-	return filepath.Join(TEMPLATES_PATH, fmt.Sprintf("%s.html", name))
+// components: ordered as per required by html/template
+func composeTemplate(
+	t Templates,
+	name string,
+	components []string,
+) {
+	paths := []string{}
+	for _, component := range components {
+		filename := fmt.Sprintf("%s.html", component)
+		path := filepath.Join(TEMPLATES_PATH, filename)
+		paths = append(paths, path)
+	}
+	t[name] = template.Must(template.ParseFiles(paths...))
 }

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"geddit/pkg/templates"
 	"geddit/pkg/user"
-	"html/template"
 	"log/slog"
 	"net/http"
 
@@ -15,7 +14,7 @@ import (
 const STATIC_RESOURCES_PATH = "./static"
 
 type Controller struct {
-	Templates   *template.Template
+	Templates   templates.Templates
 	UserService user.Service
 }
 
@@ -46,7 +45,10 @@ func (c *Controller) InitRouter() *chi.Mux {
 }
 
 func (c *Controller) userLoginPage(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, templates.GetStatic("login"))
+	if err := c.Templates["login"].Execute(w, nil); err != nil {
+		slog.Error("failed login page", err)
+		return
+	}
 }
 
 func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {
@@ -72,7 +74,10 @@ func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) userSignupPage(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, templates.GetStatic("signup"))
+	if err := c.Templates["signup"].Execute(w, nil); err != nil {
+		slog.Error("failed signup page", err)
+		return
+	}
 }
 
 func (c *Controller) userSignup(w http.ResponseWriter, r *http.Request) {
@@ -102,21 +107,16 @@ func (c *Controller) userProfilePage(w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 	id, err := uuid.FromString(values.Get("id"))
 	if err != nil {
-		slog.Error("failed profile request", err)
+		slog.Error("failed profile page", err)
 		return
 	}
 	user, err := c.UserService.GetById(id)
 	if err != nil {
-		slog.Error("failed profile request", err)
+		slog.Error("failed profile page", err)
 		return
 	}
-	t := c.Templates.Lookup("profile")
-	if t == nil {
-		slog.Error("failed profile request profile template is empty")
-		return
-	}
-	if err := t.Execute(w, user); err != nil {
-		slog.Error("failed profile request", err)
+	if err := c.Templates["profile"].Execute(w, user); err != nil {
+		slog.Error("failed profile page", err)
 		return
 	}
 }
