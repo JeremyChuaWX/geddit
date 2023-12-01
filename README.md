@@ -47,3 +47,7 @@ A forum web application in Go.
   - DB connection string
   - template file path (relative to `main.go`)
   - static resources file path (relative to `main.go`)
+- fix `password_test.go`
+- web controller error handling
+- post routes
+- comment routes
