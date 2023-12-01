@@ -19,11 +19,7 @@ func InitTemplates() Templates {
 }
 
 // components: ordered as per required by html/template
-func composeTemplate(
-	t Templates,
-	name string,
-	components []string,
-) {
+func composeTemplate(t Templates, name string, components []string) {
 	paths := []string{}
 	for _, component := range components {
 		filename := fmt.Sprintf("%s.html", component)
