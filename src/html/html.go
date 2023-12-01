@@ -6,13 +6,13 @@ import (
 	"path/filepath"
 )
 
-var TEMPLATE_DIR = "../templates" // relative to main.go
+const TEMPLATES_PATH = "../templates" // relative to main.go
 
 func GetTemplate(name string) *template.Template {
-	templatePath := filepath.Join(TEMPLATE_DIR, fmt.Sprintf("%s.html", name))
+	templatePath := filepath.Join(TEMPLATES_PATH, fmt.Sprintf("%s.html", name))
 	return template.Must(template.ParseFiles(templatePath))
 }
 
 func GetStatic(name string) string {
-	return filepath.Join(TEMPLATE_DIR, fmt.Sprintf("%s.html", name))
+	return filepath.Join(TEMPLATES_PATH, fmt.Sprintf("%s.html", name))
 }

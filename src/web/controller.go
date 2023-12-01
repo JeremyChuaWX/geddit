@@ -9,6 +9,8 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+const STATIC_RESOURCES_PATH = "../static"
+
 type Controller struct {
 	UserService user.Service
 }
@@ -19,7 +21,10 @@ func (c *Controller) InitRouter() *chi.Mux {
 	// static resources
 	router.Handle(
 		"/static/*",
-		http.StripPrefix("/static/", http.FileServer(http.Dir("../static"))),
+		http.StripPrefix(
+			"/static/",
+			http.FileServer(http.Dir(STATIC_RESOURCES_PATH)),
+		),
 	)
 
 	// user login
