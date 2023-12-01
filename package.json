@@ -5,7 +5,7 @@
     "type": "module",
     "main": "index.js",
     "scripts": {
-        "build": "concurrently 'vite build' 'tailwindcss -i ./frontend/index.css -o ./static/index.css'",
+        "build": "concurrently 'vite build --watch' 'tailwindcss -i ./frontend/index.css -o ./static/index.css --watch'",
         "format": "prettier --write ."
     },
     "keywords": [],
