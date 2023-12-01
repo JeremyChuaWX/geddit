@@ -1,8 +1,12 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-    content: ["templates/**/*.html"],
+export default {
+    content: ["./templates/**/*.html"],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                inter: ["Inter"],
+            },
+        },
     },
     plugins: [
         require("@tailwindcss/typography"),
