@@ -2,7 +2,7 @@ package post
 
 import (
 	"context"
-	"geddit/postgres"
+	"geddit/pkg/postgres"
 
 	"github.com/gofrs/uuid/v5"
 	"github.com/jackc/pgx/v5"

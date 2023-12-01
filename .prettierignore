@@ -1,7 +1,7 @@
-migrations/
-pg_admin/
-src/
-static/
 README.md
-package-lock.json
 compose.dev.yaml
+migrations/
+package-lock.json
+pg_admin/
+pkg/
+static/

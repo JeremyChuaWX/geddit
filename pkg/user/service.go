@@ -2,8 +2,8 @@ package user
 
 import (
 	"context"
-	"geddit/password"
-	"geddit/postgres"
+	"geddit/pkg/password"
+	"geddit/pkg/postgres"
 
 	"github.com/gofrs/uuid/v5"
 	"github.com/jackc/pgx/v5"

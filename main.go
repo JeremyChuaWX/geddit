@@ -1,9 +1,9 @@
 package main
 
 import (
-	"geddit/postgres"
-	"geddit/user"
-	"geddit/web"
+	"geddit/pkg/postgres"
+	"geddit/pkg/user"
+	"geddit/pkg/web"
 	"log"
 	"net/http"
 )

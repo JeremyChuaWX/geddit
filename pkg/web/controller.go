@@ -1,15 +1,15 @@
 package web
 
 import (
-	"geddit/html"
-	"geddit/user"
+	"geddit/pkg/html"
+	"geddit/pkg/user"
 	"log/slog"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 )
 
-const STATIC_RESOURCES_PATH = "../static"
+const STATIC_RESOURCES_PATH = "./static"
 
 type Controller struct {
 	UserService user.Service
