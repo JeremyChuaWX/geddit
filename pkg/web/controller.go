@@ -69,7 +69,7 @@ func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {
 		w,
 		r,
 		fmt.Sprintf("/profile?id=%s", user.Id),
-		http.StatusFound,
+		http.StatusSeeOther,
 	)
 }
 
@@ -99,7 +99,7 @@ func (c *Controller) userSignup(w http.ResponseWriter, r *http.Request) {
 		w,
 		r,
 		fmt.Sprintf("/profile?id=%s", id.String()),
-		http.StatusFound,
+		http.StatusSeeOther,
 	)
 }
 
