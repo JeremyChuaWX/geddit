@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"geddit/pkg/password"
 	"geddit/pkg/postgres"
 
@@ -103,9 +104,12 @@ func (s *service) Login(dto LoginDto) (user User, err error) {
 	if err != nil {
 		return User{}, err
 	}
-	err = password.Verify(dto.Password, user.PasswordHash)
+	match, err := password.Verify(dto.Password, user.PasswordHash)
 	if err != nil {
 		return User{}, err
+	}
+	if !match {
+		return User{}, errors.New("wrong credentials")
 	}
 	return user, nil
 }
