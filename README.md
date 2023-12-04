@@ -50,3 +50,5 @@ A forum web application in Go.
 - web controller error handling
 - post routes
 - comment routes
+- protected routes
+- input validation
