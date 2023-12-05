@@ -30,11 +30,11 @@ func (c *Controller) InitRouter() *chi.Mux {
 		),
 	)
 
-	// user login
-	router.Get("/login", c.userLoginPage)
-	router.Post("/login", c.userLogin)
-
-	// user signup
+	router.Get("/login", c.loginPage)
+	router.Post("/login", c.login)
+	router.Get("/signup", c.signupPage)
+	router.Post("/signup", c.signup)
+	router.Get("/profile", c.profilePage)
 	router.Get("/signup", c.userSignupPage)
 	router.Post("/signup", c.userSignup)
 
@@ -44,14 +44,14 @@ func (c *Controller) InitRouter() *chi.Mux {
 	return router
 }
 
-func (c *Controller) userLoginPage(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) loginPage(w http.ResponseWriter, r *http.Request) {
 	if err := c.Templates["login"].Execute(w, nil); err != nil {
 		slog.Error("failed login page", err)
 		return
 	}
 }
 
-func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) login(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		slog.Error("failed login request", err)
 		return
@@ -73,14 +73,14 @@ func (c *Controller) userLogin(w http.ResponseWriter, r *http.Request) {
 	)
 }
 
-func (c *Controller) userSignupPage(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) signupPage(w http.ResponseWriter, r *http.Request) {
 	if err := c.Templates["signup"].Execute(w, nil); err != nil {
 		slog.Error("failed signup page", err)
 		return
 	}
 }
 
-func (c *Controller) userSignup(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) signup(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		slog.Error("failed signup request", err)
 		return
@@ -98,12 +98,15 @@ func (c *Controller) userSignup(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(
 		w,
 		r,
-		fmt.Sprintf("/profile?id=%s", id.String()),
+		fmt.Sprintf("/profile?id=%s", id),
 		http.StatusSeeOther,
 	)
 }
 
-func (c *Controller) userProfilePage(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) profilePage(w http.ResponseWriter, r *http.Request) {
+	type profilePageData struct {
+		Profile user.User
+	}
 	values := r.URL.Query()
 	id, err := uuid.FromString(values.Get("id"))
 	if err != nil {
@@ -115,7 +118,10 @@ func (c *Controller) userProfilePage(w http.ResponseWriter, r *http.Request) {
 		slog.Error("failed profile page", err)
 		return
 	}
-	if err := c.Templates["profile"].Execute(w, user); err != nil {
+	data := profilePageData{
+		Profile: user,
+	}
+	if err := c.Templates["profile"].Execute(w, data); err != nil {
 		slog.Error("failed profile page", err)
 		return
 	}
