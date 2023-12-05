@@ -95,12 +95,7 @@ func (c *Controller) signup(w http.ResponseWriter, r *http.Request) {
 		slog.Error("failed signup request", err)
 		return
 	}
-	http.Redirect(
-		w,
-		r,
-		fmt.Sprintf("/profile?id=%s", id),
-		http.StatusSeeOther,
-	)
+	http.Redirect(w, r, fmt.Sprintf("/profile?id=%s", id), http.StatusSeeOther)
 }
 
 func (c *Controller) profilePage(w http.ResponseWriter, r *http.Request) {
