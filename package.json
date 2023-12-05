@@ -8,7 +8,7 @@
         "predev": "docker compose --env-file .env.dev -f compose.dev.yaml up --build -d",
         "dev-vite": "vite build --watch",
         "dev-tailwind": "tailwindcss -i ./frontend/index.css -o ./static/index.css --watch",
-        "dev-go": "go run main.go",
+        "dev-go": "air",
         "dev": "concurrently -k 'npm:dev-*'",
         "postdev": "docker compose --env-file .env.dev -f compose.dev.yaml down --remove-orphans --volumes",
         "clean": "rm -rf static pg_data",

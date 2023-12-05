@@ -1,0 +1,3 @@
+[build]
+  include_dir = ["pkg", "templates"]
+  include_file = ["main.go"]

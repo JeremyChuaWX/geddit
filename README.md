@@ -20,6 +20,10 @@ A forum web application in Go.
   - edit the contents of my posts, with diffs/versions to display the changes publicly
   - edit the contents of my comments, with diffs/versions to display the changes publicly
 
+## Dependencies
+
+- [Air](https://github.com/cosmtrek/air): live reloading go server
+
 ## Development
 
 - we use npm to spin up our development environment
