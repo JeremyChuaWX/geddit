@@ -103,6 +103,10 @@ func (c *Controller) profilePage(w http.ResponseWriter, r *http.Request) {
 		Profile user.User
 	}
 	values := r.URL.Query()
+	if !values.Has("id") {
+		slog.Error("failed profile page no id")
+		return
+	}
 	id, err := uuid.FromString(values.Get("id"))
 	if err != nil {
 		slog.Error("failed profile page", err)
