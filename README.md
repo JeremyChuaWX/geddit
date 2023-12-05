@@ -48,7 +48,6 @@ A forum web application in Go.
   - template file path (relative to `main.go`)
   - static resources file path (relative to `main.go`)
 - web controller error handling
-- post routes
 - comment routes
 - protected routes
 - input validation
