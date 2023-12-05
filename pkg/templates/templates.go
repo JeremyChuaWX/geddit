@@ -15,6 +15,9 @@ func InitTemplates() Templates {
 	composeTemplate(t, "login", []string{"base", "login"})
 	composeTemplate(t, "signup", []string{"base", "signup"})
 	composeTemplate(t, "profile", []string{"base", "profile"})
+	composeTemplate(t, "home", []string{"base", "home", "postcard"})
+	composeTemplate(t, "post", []string{"base", "post"})
+	composeTemplate(t, "createpost", []string{"base", "createpost"})
 	return t
 }
 

@@ -14,8 +14,8 @@ type Post struct {
 	CreatedAt time.Time `db:"created_at"`
 }
 
-type createDto struct {
-	author uuid.UUID
-	title  string
-	body   string
+type CreateDto struct {
+	Author uuid.UUID
+	Title  string
+	Body   string
 }

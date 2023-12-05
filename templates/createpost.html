@@ -1,0 +1,38 @@
+{{define "body"}}
+<main class="flex flex-col items-center pt-20">
+    <div
+        class="flex flex-col gap-8 justify-center items-center p-8 rounded-lg shadow"
+    >
+        <h1 class="text-4xl">New Post</h1>
+        <form
+            method="post"
+            class="flex flex-col gap-8 justify-center items-center"
+        >
+            <div
+                class="grid grid-cols-[minmax(0,_1fr)_auto] gap-2 items-center"
+            >
+                <label class="justify-self-end">Title</label>
+                <input
+                    name="title"
+                    type="text"
+                    required
+                    class="bg-gray-100 rounded-lg border-none"
+                />
+                <label class="justify-self-end">Body</label>
+                <input
+                    name="body"
+                    type="text"
+                    required
+                    class="bg-gray-100 rounded-lg border-none"
+                />
+            </div>
+            <button
+                type="submit"
+                class="py-2 px-4 w-full bg-blue-200 rounded-lg shadow"
+            >
+                Post
+            </button>
+        </form>
+    </div>
+</main>
+{{end}}

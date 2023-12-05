@@ -1,0 +1,6 @@
+{{define "body"}}
+<main class="flex flex-col items-center">
+    <p>Posts</p>
+    <div>{{range .Posts}} {{template "postcard" .}} {{end}}</div>
+</main>
+{{end}}
